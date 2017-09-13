@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Source this script to enable the development environment.
+# This has not been hardened against all shells under the sun
+# so we insist on a moderately recent version of bash (4) and
+# coreutils (8).
+# You may disable the check and use other versions but this
+# is untested.
+
+
+(( "$(sort --version | awk '((NR==1)&&/coreutils/){split($(NF),fields,".");print fields[1]}')" >= 8 )) || {
+	echo ERROR: Please use coreutils version 8 or higher
+	kill -INT $$
+}
+
+[[ "$(printf "%s\n" 4 "${BASH_VERSION:-0}" | sort -rV | head -n1)" == "$BASH_VERSION" ]] || {
+	echo ERROR: Please use bash version 4 or higher
+	kill -INT $$
+}
+
+[[ $_ != $0 ]] || {
+	echo ERROR: Please source this script.
+	kill -INT $$
+}
+
+
+here="$(dirname "$(readlink -f "$0")")"
+export PATH="${here}/.ve/bin:$PATH"

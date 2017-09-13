@@ -1,0 +1,43 @@
+#!/bin/bash
+touch /user-data-started.deleteme
+set -x
+
+export DEBIAN_FRONTEND=noninteractive
+touch /user-data-started.deleteme.2
+apt-get update
+touch /user-data-started.deleteme.3
+apt install -yy ntp ntpstat
+touch /user-data-started.deleteme.4
+
+apt-get install -yy nginx
+touch /user-data-started.deleteme.5
+
+
+rm -f /etc/nginx/sites-enabled/default
+touch /user-data-started.deleteme.6
+cat <<EOF >/etc/nginx/sites-available/terraform-winning-black
+upstream myapp1 {
+    server backend.winning.black:8080;
+}
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    location / {
+        proxy_pass http://myapp1;
+    }
+}
+EOF
+touch /user-data-started.deleteme.7
+ln -s ../sites-available/terraform-winning-black /etc/nginx/sites-enabled/terraform-winning-black
+service nginx reload
+touch /user-data-started.deleteme.8
+
+
+cat <<EOF >/etc/cron.d/reload-nginx
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+*/2 * * * *   root    service nginx reload
+EOF
+touch /user-data-started.deleteme.9

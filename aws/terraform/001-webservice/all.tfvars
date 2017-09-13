@@ -1,0 +1,13 @@
+vpc_name            = "test_service"
+region              = "eu-west-1"
+availability_zone   = "a"
+vpc_cidr            = "10.20.0.0/16"
+public_subnet_cidr  = "10.20.1.0/24"
+private_subnet_cidr = "10.20.2.0/24"
+
+service_domain_name = "terraform.winning.black"
+bastion_domain_name = "scopetrim.winning.black"
+backend_domain_name = "backend.winning.black"
+service_zone_name   = "winning.black."
+private_service_ip  = "10.20.1.30"
+ssh_key_name        = "maxim"

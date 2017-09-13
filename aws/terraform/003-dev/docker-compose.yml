@@ -1,0 +1,25 @@
+version: '3'
+services:
+  backend:
+    image: wibniwibni/node-hello-world:latest
+    ports:
+      - 8080
+    networks:
+      - private
+  lb:
+    image: nginx
+    ports:
+      - 80:80
+    links:
+      - backend
+    volumes:
+      #- /var/run/docker.sock:/var/run/docker.sock 
+      - ${PWD}/lb/etc/nginx/sites-enabled/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - private
+      - public
+networks:
+  public:
+    driver: bridge
+  private:
+    driver: bridge
