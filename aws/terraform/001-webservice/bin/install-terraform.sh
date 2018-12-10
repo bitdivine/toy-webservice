@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eux
 set -o pipefail
@@ -6,7 +6,7 @@ set -o pipefail
 INSTALL_DIR="${INSTALL_DIR:-/opt/terraform/bin}"
 # Get the version to install, degrading gracefully depending on which tools are installed:
 test -n "${VERSION:-}" \
-    || VERSION="$(curl https://releases.hashicorp.com/index.json | jmespath "terraform.versions.*.version" --output text | sort --version-sort | tail -n1)" \
+    || VERSION="$(curl https://releases.hashicorp.com/index.json | jmespath "terraform.versions.*.version" --output text | grep -v -- - | sort --version-sort | tail -n1)" \
     || VERSION="$(curl https://releases.hashicorp.com/terraform/ | grep terraform_ | sed 's/.*href.*>terraform_//g;s/<.*//g' | sort --version-sort | tail -n1)"
 CURRENT="$(terraform --version | awk '{print $(NF);exit}' || true)"
 PLATFORM="$(uname | tr 'A-Z' 'a-z')"
